@@ -2,6 +2,8 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+#include "./conf.h"
+
 // You can use https://www.browserling.com/tools/random-hex to generate a random SENSOR_ID
 #define SENSOR_ID "b5c6474bcdb096f1587faafc2063759c"
 
@@ -11,13 +13,15 @@
 #define ID_MQTT "HomeAut"
 #define PUBLISH_DELAY 2000 // 2 seconds
 
+// Edit conf.h file with your WiFi and MQTT Broker information
+
 // WiFi
-const char *SSID = "WIFI_SSID";         // Replace with your WiFi SSID
-const char *PASSWORD = "WIFI_PASSWORD"; // Replace with your WiFi PASSWORD
+const char *SSID = ENV::WIFI_SSID;
+const char *PASSWORD = ENV::WIFI_PASSWORD;
 
 // MQTT
-const char *MQTT_BROKER = "BROKER_URL"; // Replace with your MQTT Broker URL (yout might use 'iot.eclipse.org')
-const int BROKER_PORT = 1883;           // Replace with your MQTT Broker PORT
+const char *MQTT_BROKER = ENV::MQTT_BROKER;
+const int BROKER_PORT = ENV::MQTT_BROKER_PORT;
 
 // WiFi and MQTT variables
 WiFiClient client;

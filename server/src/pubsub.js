@@ -1,6 +1,4 @@
-require('./src/config/dotenv');
-
-const { broker: brokerConfig } = require('./src/config/mqtt');
+const { broker: brokerConfig } = require('./config/mqtt');
 
 const mqtt = require('mqtt');
 

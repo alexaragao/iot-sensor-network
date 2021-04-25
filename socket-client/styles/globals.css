@@ -1,0 +1,42 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Montserrat, sans-serif ;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  color: #777f92;
+  border-color: #777f92!important;
+  box-sizing: border-box;
+}
+
+.center {
+  justify-self: center;
+  align-items: center;
+}
+
+.r-center {
+  justify-content: center;
+}
+
+.c-center {
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}

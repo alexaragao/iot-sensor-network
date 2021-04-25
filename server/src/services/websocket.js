@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 
 class WebSocketServer {
   constructor (server) {
-    this.sever = new WebSocket.Server({ server });
+    this.server = new WebSocket.Server({ server });
     this.assigns = {};
   }
 

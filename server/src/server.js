@@ -7,11 +7,16 @@ const app = require('./app');
 
 const server = http.createServer(app);
 
-// Connect with MQTT Broker
-require('./pubsub');
+// Connect with MQTT Broker and add to Express App
+const mqtt = require('./services/mqtt');
+app.set('mqtt', mqtt);
 
 // Start WebSocket server
-require('./websocket-server')(server);
+const wsserver = require('./services/websocket')(server);
+app.set('ws', wsserver);
+
+mqtt.set('ws', wsserver);
+wsserver.set('mqtt', mqtt);
 
 server.listen(process.env.PORT || 5000, () => {
   console.log(`Server running on port ${server.address().port}`);

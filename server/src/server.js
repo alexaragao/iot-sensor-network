@@ -13,9 +13,9 @@ app.set('mqtt', mqtt);
 
 // Start WebSocket server
 const wsserver = require('./services/websocket')(server);
-app.set('ws', wsserver);
+app.set('wss', wsserver);
 
-mqtt.set('ws', wsserver);
+mqtt.set('wss', wsserver);
 wsserver.set('mqtt', mqtt);
 
 server.listen(process.env.PORT || 5000, () => {

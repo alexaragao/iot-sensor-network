@@ -12,23 +12,29 @@ class MQTTPubSub {
 
     this.broker.subscribe('sensors/status');
     this.broker.on('message', (topic, payload) => {
-      const data = JSON.parse(payload.toString());
+      try {
+        console.log(payload.toString());
+        const data = JSON.parse(payload.toString());
+        console.log(data);
 
-      const ws = this.get('ws');
-      if (ws) {
-        ws.clients.forEach(client => {
-          client.send(
-            JSON.stringify({
-              sensor: data.sensor_id,
-              value: data.value_raw,
-              timestamp: process.uptime()  
-            })
-          );
-        });
-      }
-      switch (topic) {
-        case '':
-          break;
+        const wss = this.get('wss');
+        if (wss && wss.clients) {
+          wss.clients.forEach(client => {
+            client.send(
+              JSON.stringify({
+                sensor: data.sensor_id,
+                value: data.value_raw,
+                timestamp: process.uptime()
+              })
+            );
+          });
+        }
+        switch (topic) {
+          case '':
+            break;
+        }
+      } catch (e) {
+        console.error(e);
       }
     });
   }

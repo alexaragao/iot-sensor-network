@@ -1,4 +1,8 @@
 node_modules/
 .history/
 
+# Server
+.env
+
+# MQTT NodeMCU
 conf.h

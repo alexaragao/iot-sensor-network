@@ -3,12 +3,15 @@
 #include <PubSubClient.h>
 
 #include "./conf.h"
+#include "./sensors.h"
+
+#define SENSOR_PIN A0
 
 // You can use https://www.browserling.com/tools/random-hex to generate a random SENSOR_ID
 #define SENSOR_ID "b5c6474bcdb096f1587faafc2063759c"
 
-#define SUBSCRIBE_TOPIC ""
-#define PUBLISH_TOPIC ""
+#define SUBSCRIBE_TOPIC "clock"
+#define PUBLISH_TOPIC "sensors/status"
 
 #define ID_MQTT "HomeAut"
 #define PUBLISH_DELAY 2000 // 2 seconds
@@ -33,9 +36,12 @@ char EstadoSaida = '0';
 //Prototypes
 void initWiFi();
 void initMQTT();
+void initSensor();
 
 void setup() {
   Serial.begin(115200);
+
+  initSensor();
 
   initWiFi();
   initMQTT();
@@ -117,11 +123,15 @@ void publishSensorData() {
   StaticJsonDocument<256> data;
 
   data["sensor_id"] = SENSOR_ID;
+  data["sensor_type"] = "sound";
+  data["sensor_model"] = "Sound Sensor FC-04";
+  data["value_raw"] = analogRead(SENSOR_PIN);
+  data["value"] = analogRead(SENSOR_PIN) * (3.3 / 1023.0);
   data["timestamp"] = millis();
 
   char json[256];
   serializeJson(data, json);
-  
+
   MQTT.publish(PUBLISH_TOPIC, json);
 
   delay(PUBLISH_DELAY);
@@ -134,4 +144,8 @@ void loop() {
 
   // Keep alive MQTT connection
   MQTT.loop();
+}
+
+void initSensor() {
+  pinMode(SENSOR_PIN, INPUT);
 }

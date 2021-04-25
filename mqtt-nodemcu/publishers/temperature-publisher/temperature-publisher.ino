@@ -7,8 +7,8 @@
 // You can use https://www.browserling.com/tools/random-hex to generate a random SENSOR_ID
 #define SENSOR_ID "b5c6474bcdb096f1587faafc2063759c"
 
-#define SUBSCRIBE_TOPIC ""
-#define PUBLISH_TOPIC ""
+#define SUBSCRIBE_TOPIC "clock"
+#define PUBLISH_TOPIC "sensors/status"
 
 #define ID_MQTT "HomeAut"
 #define PUBLISH_DELAY 2000 // 2 seconds
@@ -117,6 +117,8 @@ void publishSensorData() {
   StaticJsonDocument<256> data;
 
   data["sensor_id"] = SENSOR_ID;
+  data["sensor_type"] = "temperature";
+  data["sensor_model"] = "Thermistor NTC 103";
   data["timestamp"] = millis();
 
   char json[256];

@@ -9,13 +9,13 @@
 #define DHT_TYPE DHT22
 
 // You can use https://www.browserling.com/tools/random-hex to generate a random SENSOR_ID
-#define SENSOR_ID "b5c6474bcdb096f1587faafc2063759c"
+#define SENSOR_ID "da99c6f89140fc97d5ef6aa9"
 
 #define SUBSCRIBE_TOPIC "clock"
 #define PUBLISH_TOPIC "sensors/status"
 
 #define ID_MQTT "HomeAut"
-#define PUBLISH_DELAY 2000 // 2 seconds
+#define PUBLISH_DELAY 1000 // 2 seconds
 
 // Edit conf.h file with your WiFi and MQTT Broker information
 
@@ -124,6 +124,7 @@ void publishSensorData() {
   StaticJsonDocument<256> data;
   
   data["device_id"] = SENSOR_ID;
+  data["device_local_ip"] = WiFi.localIP().toString();
   data["sensor"] = "DHT11";
   data["timestamp"] = millis();
   

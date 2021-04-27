@@ -1,8 +1,12 @@
 node_modules/
 .history/
 
+mosquitto.conf
+
 # Server
 .env
 
 # MQTT NodeMCU
 conf.h
+
+.tmp

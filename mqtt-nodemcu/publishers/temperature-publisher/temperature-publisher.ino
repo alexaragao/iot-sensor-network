@@ -5,13 +5,13 @@
 #include "./conf.h"
 
 // You can use https://www.browserling.com/tools/random-hex to generate a random SENSOR_ID
-#define SENSOR_ID "b5c6474bcdb096f1587faafc2063759c"
+#define SENSOR_ID "aa98a2482acebaf52b8848d6"
 
 #define SUBSCRIBE_TOPIC "clock"
 #define PUBLISH_TOPIC "sensors/status"
 
 #define ID_MQTT "HomeAut"
-#define PUBLISH_DELAY 2000 // 2 seconds
+#define PUBLISH_DELAY 1000 // 2 seconds
 
 // Edit conf.h file with your WiFi and MQTT Broker information
 
@@ -28,15 +28,18 @@ WiFiClient client;
 PubSubClient MQTT(client);
 
 // Program variables
-char EstadoSaida = '0';
+#define SENSOR_PIN A0
 
 //Prototypes
+void initSensor();
 void initWiFi();
 void initMQTT();
 
 void setup() {
   Serial.begin(115200);
 
+  initSensor();
+  
   initWiFi();
   initMQTT();
 }
@@ -113,13 +116,29 @@ void checkConnectionStatus() {
   reconnectWiFi();
 }
 
+float readTemperature() {
+  float steinhartHartCoficient_A = 9.017477479678323e-04;
+  float steinhartHartCoficient_B = 2.4891903099470377e-04;
+  float steinhartHartCoficient_C = 2.0432138570931753e-07;
+
+  float voltageRead = analogRead(SENSOR_PIN);
+  float R = 10000 * (1023.0 / (float) voltageRead - 1.0);
+  float lnR = log(R);
+  
+  return 1.0f/(steinhartHartCoficient_A +steinhartHartCoficient_B * lnR + steinhartHartCoficient_C * lnR * lnR * lnR);
+}
+
 void publishSensorData() {
+  Serial.println(readTemperature() - 273.15f);
   StaticJsonDocument<256> data;
 
-  data["sensor_id"] = SENSOR_ID;
-  data["sensor_type"] = "temperature";
-  data["sensor_model"] = "Thermistor NTC 103";
+  data["device_id"] = SENSOR_ID;
+  data["device_local_ip"] = WiFi.localIP().toString();
+  data["sensor"] = "Thermistor NTC 10k 103";
   data["timestamp"] = millis();
+
+    JsonObject sensorObject = data.createNestedObject("data");
+    sensorObject["temperature"] = readTemperature() - 273.15;
 
   char json[256];
   serializeJson(data, json);
@@ -136,4 +155,8 @@ void loop() {
 
   // Keep alive MQTT connection
   MQTT.loop();
+}
+
+void initSensor() {
+  pinMode(SENSOR_PIN, INPUT);
 }

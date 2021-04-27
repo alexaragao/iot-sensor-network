@@ -138,12 +138,14 @@ void publishSensorData() {
 }
 
 void loop() {
-  checkConnectionStatus();
+//  checkConnectionStatus();
 
-  publishSensorData();
+//  publishSensorData();
 
   // Keep alive MQTT connection
-  MQTT.loop();
+//  MQTT.loop();
+  Serial.println(1024 - analogRead(SENSOR_PIN));
+  delay(50);
 }
 
 void initSensor() {

@@ -14,16 +14,13 @@ class MQTTPubSub {
     this.broker.on('message', (topic, payload) => {
       try {
         const data = JSON.parse(payload.toString());
-        console.log(data);
-
+        
         const wss = this.get('wss');
         if (wss) {
-          console.log("sending...");
           wss.server.clients.forEach(client => {
             client.send(
               JSON.stringify({
-                sensor: data.device_id,
-                value: data.data,
+                device: data,
                 timestamp: process.uptime()
               })
             );
